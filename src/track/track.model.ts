@@ -1,5 +1,4 @@
-import { BelongsTo, Column, DataType, HasMany, Model, Table } from "sequelize-typescript";
-import { License } from "../license/license.model";
+import { Column, DataType, HasMany, Model, Table } from "sequelize-typescript";
 import { ArchiveLicense } from "./archive-license.model";
 
 interface TrackCreationAttrs {

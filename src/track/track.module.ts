@@ -5,13 +5,14 @@ import { FilesModule } from "../files/files.module";
 import { SequelizeModule } from "@nestjs/sequelize";
 import { Track } from "./track.model";
 import { ArchiveLicense } from "./archive-license.model";
+import {License} from "../license/license.model";
 
 @Module({
   providers: [TrackService],
   controllers: [TrackController],
   imports: [
       FilesModule,
-      SequelizeModule.forFeature([Track, ArchiveLicense])
+      SequelizeModule.forFeature([Track, ArchiveLicense, License])
   ]
 })
 export class TrackModule {}

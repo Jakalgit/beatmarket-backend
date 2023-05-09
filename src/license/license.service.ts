@@ -16,21 +16,20 @@ export class LicenseService {
 
     async create(dto: CreateLicenseDto) {
         const paragraphs = dto.paragraphs
-        for (let i = 0; i < paragraphs.length; i++) {
-            const candidate = await this.paragraphRepository.findOne({where: {text: paragraphs[i].text}})
-            if (candidate) {
-                throw new HttpException('Пункты описания не должны совпадать', HttpStatus.FORBIDDEN)
-            }
-        }
+        // for (let i = 0; i < paragraphs.length; i++) {
+        //     const candidate = await this.paragraphRepository.findOne({where: {text: paragraphs[i]}})
+        //     if (candidate) {
+        //         throw new HttpException('Пункты описания не должны совпадать', HttpStatus.FORBIDDEN)
+        //     }
+        // }
         const license = await this.licenseRepository.create({
             name: dto.name,
             price: dto.price,
             withdraw: dto.withdraw,
-            trackId: dto.trackId,
         })
         for (let i = 0; i < paragraphs.length; i++) {
-            const paragraph = await this.paragraphRepository.create(paragraphs[0])
-            if (paragraph) {
+            const paragraph = await this.paragraphRepository.create({text: paragraphs[i], licenseId: license.id})
+            if (!paragraph) {
                 throw new HttpException('Внутренняя ошибка сервера', HttpStatus.INTERNAL_SERVER_ERROR)
             }
             await license.$add('paragraph', [paragraph.id])
@@ -54,6 +53,14 @@ export class LicenseService {
 
     async removeLicenseParagraph() {
 
+    }
+
+    async getAll() {
+        return await this.licenseRepository.findAll()
+    }
+
+    async getAllParagraphByLicenseId(id: number) {
+        return await this.paragraphRepository.findAll({where: {licenseId: id}})
     }
 
     async changeName(dto: ChangeNameDto) {

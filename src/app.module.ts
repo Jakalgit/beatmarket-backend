@@ -10,6 +10,9 @@ import { Block } from "./user/block.model";
 import { ServeStaticModule } from "@nestjs/serve-static";
 import { LicenseModule } from './license/license.module';
 import * as path from "path"
+import {ArchiveLicense} from "./track/archive-license.model";
+import {LicenseParagraph} from "./license/paragraph.model";
+import {License} from "./license/license.model";
 
 @Module({
   imports: [
@@ -26,7 +29,7 @@ import * as path from "path"
           username: process.env.POSTGRES_USER,
           password: process.env.POSTGRES_PASSWORD,
           database: process.env.POSTGRES_DB,
-          models: [User, Track, Block],
+          models: [User, Track, Block, License, ArchiveLicense, LicenseParagraph],
           autoLoadModels: true,
       }),
       FilesModule,

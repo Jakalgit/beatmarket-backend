@@ -1,4 +1,4 @@
-import { Body, Controller, Post } from "@nestjs/common";
+import {Body, Controller, Get, Param, Post, Query} from "@nestjs/common";
 import { CreateLicenseDto } from "./dto/create-license.dto";
 import { LicenseService } from "./license.service";
 import { ChangeNameDto } from "../dto/change-name.dto";
@@ -30,5 +30,13 @@ export class LicenseController {
         return this.licenseService.changeWithdraw(dto)
     }
 
+    @Get()
+    getAll() {
+        return this.licenseService.getAll()
+    }
 
+    @Get('/paragraphs/:id')
+    getAllParagraphsByLicenseId(@Param('id') id: number) {
+        return this.licenseService.getAllParagraphByLicenseId(id)
+    }
 }

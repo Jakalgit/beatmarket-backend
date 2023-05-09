@@ -53,7 +53,7 @@ export class TrackController {
         return this.trackService.getOneById(id)
     }
 
-    @Post('/license/add')
+    @Post('/license-archive/add')
     @UseInterceptors(FileFieldsInterceptor([
         { name: 'archive', maxCount: 1},
     ]))
@@ -61,14 +61,19 @@ export class TrackController {
         return this.trackService.addArchiveLicense(dto, files.archive[0])
     }
 
-    @Delete('/license/remove')
-    removeArchiveLicense(@Body() id: number) {
+    @Delete('/license-archive/remove/:id')
+    removeArchiveLicense(@Param('id') id: number) {
         return this.trackService.removeArchiveLicense(id)
     }
 
     @Delete()
     delete(@Body() id: number) {
         return this.trackService.delete(id)
+    }
+
+    @Get('/licenses/:id')
+    getAllLicenseByTrackId(@Param('id') id: number) {
+        return this.trackService.getAllLicenseByTrackId(id)
     }
 
     @Get('/all')

@@ -7,12 +7,14 @@ import { ChangeNameDto } from "../dto/change-name.dto";
 import { ChangeBpmDto } from "./dto/change-bpm.dto";
 import { CreateArchiveLicenseDto } from "./dto/create-archive-license.dto";
 import { ArchiveLicense } from "./archive-license.model";
+import {License} from "../license/license.model";
 
 @Injectable()
 export class TrackService {
 
     constructor(@InjectModel(Track) private trackRepository: typeof Track,
                 @InjectModel(ArchiveLicense) private archiveRepository: typeof ArchiveLicense,
+                @InjectModel(License) private licenseRepository: typeof License,
                 private fileService: FilesService) {
     }
 
@@ -60,7 +62,18 @@ export class TrackService {
             throw new HttpException('Архив лицензии не найден', HttpStatus.NOT_FOUND)
         }
         await this.fileService.removeFile(archiveLicense.path, TypeFile.ARCHIVE)
+        await archiveLicense.destroy()
         return archiveLicense
+    }
+
+    async getAllLicenseByTrackId(id: number) {
+        const archives = await this.archiveRepository.findAll({where: {trackId: id}})
+        let licensesResponse = []
+        for (let i = 0; i < archives.length; i++) {
+            const license = await this.licenseRepository.findByPk(archives[i].licenseId)
+            licensesResponse.push(license)
+        }
+        return licensesResponse
     }
 
     async getOneById(id: number) {

@@ -28,7 +28,8 @@ export class TrackService {
             audio: audioPath,
             image: imagePath,
             purchases: 0,
-            listens: 0
+            listens: 0,
+            reactions: 0,
         })
     }
 
@@ -86,6 +87,13 @@ export class TrackService {
 
     async getAllOnPage(options: string) {
 
+    }
+
+    // надо добавить увеличение поля реакция у создателя
+    async incrementReactions(id: number) {
+        const track = await this.trackRepository.findByPk(id)
+        await track.increment({'reactions': 1})
+        return track
     }
 
     async changeName(dto: ChangeNameDto) {

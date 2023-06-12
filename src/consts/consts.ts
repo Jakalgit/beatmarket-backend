@@ -1,0 +1,1 @@
+export const DEFAULT_USER_PREVIEW = "default-user-preview.png"

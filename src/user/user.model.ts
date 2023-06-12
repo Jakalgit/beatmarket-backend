@@ -1,12 +1,15 @@
-import { BelongsTo, Column, DataType, ForeignKey, HasOne, Model, Table } from "sequelize-typescript";
+import { BelongsTo, Column, DataType, ForeignKey, HasMany, HasOne, Model, Table } from "sequelize-typescript";
 import { Block } from "./block.model";
-
+import { Notification } from "./notification.model";
+import { Subscribe } from "./subscribe.model";
+import { Confirmation } from "../confirmation/confirmation.model";
 
 interface UserCreationAttrs {
     name: string;
     identifier: string;
     email: string;
     password: string;
+    image: string;
 }
 
 @Table({tableName: 'users'})
@@ -35,4 +38,13 @@ export class User extends  Model<User, UserCreationAttrs> {
 
     @HasOne(() => Block)
     block: Block
+
+    @HasMany(() => Notification)
+    notifications: Notification[]
+
+    @HasMany(() => Subscribe)
+    subscribes: Subscribe[]
+
+    @HasMany(() => Confirmation)
+    confirmation: Confirmation[]
 }

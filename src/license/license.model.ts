@@ -1,12 +1,13 @@
 import { BelongsTo, Column, DataType, ForeignKey, HasMany, HasOne, Model, Table } from "sequelize-typescript";
 import { Track } from "../track/track.model";
 import { LicenseParagraph } from "./paragraph.model";
+import { Creator } from "../creator/creator.model";
 
 interface LicenseCreationAttrs {
     name: string;
     price: number;
     withdraw: boolean;
-    trackId: number;
+    creatorId: number;
 }
 
 @Table({tableName: 'license'})
@@ -24,6 +25,13 @@ export class License extends  Model<License, LicenseCreationAttrs> {
     @Column({type: DataType.BOOLEAN, allowNull: false, defaultValue: false})
     withdraw: boolean;
 
+    @ForeignKey(() => Creator)
+    @Column({type: DataType.INTEGER})
+    creatorId: number;
+
     @HasMany(() => LicenseParagraph, {onDelete: 'cascade'})
     paragraphs: LicenseParagraph[];
+
+    @BelongsTo(() => Creator)
+    creator: Creator;
 }

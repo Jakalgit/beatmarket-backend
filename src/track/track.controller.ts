@@ -1,5 +1,16 @@
-import { Body, Controller, Delete, Get, Param, Post, Put, UploadedFiles, UseInterceptors } from "@nestjs/common";
-import { FileFieldsInterceptor } from "@nestjs/platform-express";
+import {
+    Body,
+    Controller,
+    Delete,
+    Get,
+    Param,
+    Post,
+    Put,
+    UploadedFile,
+    UploadedFiles,
+    UseInterceptors
+} from "@nestjs/common";
+import { FileFieldsInterceptor, FileInterceptor } from "@nestjs/platform-express";
 import { CreateTrackDto } from "./dto/create-track.dto";
 import { TrackService } from "./track.service";
 import { ChangeNameDto } from "../dto/change-name.dto";
@@ -32,33 +43,32 @@ export class TrackController {
         return this.trackService.changeBpm(dto)
     }
 
-    @Post('/image')
-    @UseInterceptors(FileFieldsInterceptor([
-        { name: 'image', maxCount: 1},
-    ]))
-    changeImage(@UploadedFiles() files, @Body() id: number) {
-        return this.trackService.changeImage(id, files.image[0])
+    @Post('/change-image')
+    @UseInterceptors(FileInterceptor('image'))
+    changeImage(@UploadedFile() image, @Body() id: number) {
+        return this.trackService.changeImage(id, image)
     }
 
-    @Post('/audio')
-    @UseInterceptors(FileFieldsInterceptor([
-        { name: 'audio', maxCount: 1},
-    ]))
-    changeAudio(@UploadedFiles() files, @Body() id: number) {
-        return this.trackService.changeAudio(id, files.audio[0])
+    @Post('/change-audio')
+    @UseInterceptors(FileInterceptor('audio'))
+    changeAudio(@UploadedFile() audio, @Body() id: number) {
+        return this.trackService.changeAudio(id, audio)
     }
 
-    @Get('/:id')
-    getOneById(@Param() id: number) {
+    @Post('/increment-reactions')
+    incrementReactions(@Body() id: number) {
+        return this.trackService.incrementReactions(id)
+    }
+
+    @Get('/by-id/:id')
+    getOneById(@Param('id') id: number) {
         return this.trackService.getOneById(id)
     }
 
     @Post('/license-archive/add')
-    @UseInterceptors(FileFieldsInterceptor([
-        { name: 'archive', maxCount: 1},
-    ]))
-    addArchiveLicense(@UploadedFiles() files, @Body() dto: CreateArchiveLicenseDto) {
-        return this.trackService.addArchiveLicense(dto, files.archive[0])
+    @UseInterceptors(FileInterceptor('archive'))
+    addArchiveLicense(@UploadedFile() archive, @Body() dto: CreateArchiveLicenseDto) {
+        return this.trackService.addArchiveLicense(dto, archive)
     }
 
     @Delete('/license-archive/remove/:id')

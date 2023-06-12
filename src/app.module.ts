@@ -13,6 +13,21 @@ import * as path from "path"
 import {ArchiveLicense} from "./track/archive-license.model";
 import {LicenseParagraph} from "./license/paragraph.model";
 import {License} from "./license/license.model";
+import { AuthModule } from './auth/auth.module';
+import { CreatorModule } from './creator/creator.module';
+import { PromoCodeModule } from './promocode/promocode.module';
+import { ReviewModule } from './review/review.module';
+import { ConfirmationModule } from './confirmation/confirmation.module';
+import { PurchaseModule } from './purchase/purchase.module';
+import { FeedbackModule } from './feedback/feedback.module';
+import { Confirmation } from "./confirmation/confirmation.model";
+import { Review } from "./review/review.model";
+import { PromoCode } from "./promocode/promocode.model";
+import { Purchase } from "./purchase/purchase.model";
+import { PurchaseParagraph } from "./purchase/paragraph.model";
+import { Notification } from "./user/notification.model";
+import { Subscribe } from "./user/subscribe.model";
+import { Creator } from "./creator/creator.model";
 
 @Module({
   imports: [
@@ -29,13 +44,21 @@ import {License} from "./license/license.model";
           username: process.env.POSTGRES_USER,
           password: process.env.POSTGRES_PASSWORD,
           database: process.env.POSTGRES_DB,
-          models: [User, Track, Block, License, ArchiveLicense, LicenseParagraph],
+          models: [User, Track, Block, Creator, License, ArchiveLicense, LicenseParagraph,
+              Confirmation, Review, PromoCode, Purchase, PurchaseParagraph, Notification, Subscribe],
           autoLoadModels: true,
       }),
       FilesModule,
       TrackModule,
       UserModule,
       LicenseModule,
+      AuthModule,
+      CreatorModule,
+      PromoCodeModule,
+      ReviewModule,
+      ConfirmationModule,
+      PurchaseModule,
+      FeedbackModule,
   ]
 })
 export class AppModule {

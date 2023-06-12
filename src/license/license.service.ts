@@ -26,6 +26,7 @@ export class LicenseService {
             name: dto.name,
             price: dto.price,
             withdraw: dto.withdraw,
+            creatorId: dto.creatorId
         })
         for (let i = 0; i < paragraphs.length; i++) {
             const paragraph = await this.paragraphRepository.create({text: paragraphs[i], licenseId: license.id})
@@ -33,6 +34,7 @@ export class LicenseService {
                 throw new HttpException('Внутренняя ошибка сервера', HttpStatus.INTERNAL_SERVER_ERROR)
             }
             await license.$add('paragraph', [paragraph.id])
+            license.paragraphs = [paragraph]
         }
         return license
     }

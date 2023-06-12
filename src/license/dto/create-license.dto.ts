@@ -13,4 +13,7 @@ export class CreateLicenseDto {
 
     @Length(1, 20, {message: "Должно быть не менее 1 и не более 20 пунктов"})
     readonly paragraphs: string[];
+
+    @IsNumber({}, {message: "creator должно быть числом"})
+    readonly creatorId: number;
 }

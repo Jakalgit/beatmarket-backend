@@ -2,7 +2,7 @@ import { BelongsTo, Column, DataType, ForeignKey, HasMany, HasOne, Model, Table 
 import { Track } from "../track/track.model";
 import { User } from "../user/user.model";
 import { PromoCode } from "../promocode/promocode.model";
-import { Notification } from "./notification.model";
+import { NotificationCreator } from "./notification.model";
 
 interface CreatorCreationAttrs {
     name: string;
@@ -47,6 +47,6 @@ export class Creator extends  Model<Creator, CreatorCreationAttrs> {
     @HasMany(() => PromoCode)
     promoCodes: PromoCode[]
 
-    @HasMany(() => Notification)
-    notifications: Notification[]
+    @HasMany(() => NotificationCreator)
+    notifications: NotificationCreator[]
 }

@@ -1,6 +1,6 @@
-import { BelongsTo, Column, DataType, ForeignKey, HasMany, HasOne, Model, Table } from "sequelize-typescript";
+import { Column, DataType, HasMany, HasOne, Model, Table } from "sequelize-typescript";
 import { Block } from "./block.model";
-import { Notification } from "./notification.model";
+import { NotificationUser } from "./notification.model";
 import { Subscribe } from "./subscribe.model";
 import { Confirmation } from "../confirmation/confirmation.model";
 
@@ -39,8 +39,8 @@ export class User extends  Model<User, UserCreationAttrs> {
     @HasOne(() => Block)
     block: Block
 
-    @HasMany(() => Notification)
-    notifications: Notification[]
+    @HasMany(() => NotificationUser)
+    notifications: NotificationUser[]
 
     @HasMany(() => Subscribe)
     subscribes: Subscribe[]

@@ -14,7 +14,7 @@ import { Op } from "sequelize";
 import { FilesService, TypeFile } from "../files/files.service";
 import { DEFAULT_USER_PREVIEW } from "../consts/consts";
 import { CreateNotificationDto } from "../dto/create-notification.dto";
-import { Notification } from "./notification.model";
+import { NotificationUser } from "./notification.model";
 import { Subscribe } from "./subscribe.model";
 import { ChangeSubscribeDto } from "./dto/change-subscribe.dto";
 import { Creator } from "../creator/creator.model";
@@ -24,7 +24,7 @@ export class UserService {
 
     constructor(@InjectModel(User) private userRepository: typeof User,
                 @InjectModel(Block) private blockRepository: typeof Block,
-                @InjectModel(Notification) private notificationRepository: typeof Notification,
+                @InjectModel(NotificationUser) private notificationRepository: typeof NotificationUser,
                 @InjectModel(Subscribe) private subscribeRepository: typeof Subscribe,
                 @InjectModel(Creator) private creatorRepository: typeof Creator,
                 private fileService: FilesService) {
@@ -64,6 +64,10 @@ export class UserService {
 
     async deleteNotification(id: number) {
         return this.notificationRepository.destroy({where: {id}})
+    }
+
+    async getAllNotificationsByUserId(userId: number) {
+        return this.notificationRepository.findAll({where: {userId}})
     }
 
     async subscribe(dto: ChangeSubscribeDto) {

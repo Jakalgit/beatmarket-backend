@@ -100,4 +100,10 @@ export class UserController {
     unsubscribe(@Body() dto: ChangeSubscribeDto) {
         return this.userService.unsubscribe(dto)
     }
+
+    @UseGuards(JwtAuthGuard)
+    @Get('/notifications/:id')
+    getAllNotifications(@Param('id') id: number) {
+        return this.userService.getAllNotificationsByUserId(id)
+    }
 }

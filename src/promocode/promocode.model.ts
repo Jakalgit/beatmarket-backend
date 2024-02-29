@@ -10,7 +10,7 @@ interface PromoCodeCreationAttrs {
     creatorId: number;
 }
 
-@Table({tableName: 'notification'})
+@Table({tableName: 'promocode'})
 export class PromoCode extends  Model<PromoCode, PromoCodeCreationAttrs> {
 
     @Column({type: DataType.INTEGER, unique: true, autoIncrement: true, primaryKey: true})

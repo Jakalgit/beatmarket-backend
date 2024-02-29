@@ -8,7 +8,8 @@ import { Block } from "./block.model";
 import { AuthModule } from "../auth/auth.module";
 import { Subscribe } from "./subscribe.model";
 import { Creator } from "../creator/creator.model";
-import { Notification } from "./notification.model";
+import { NotificationUser } from "./notification.model";
+import { ConfirmCode } from "./confirm-code.model";
 
 @Module({
   providers: [UserService],
@@ -16,7 +17,7 @@ import { Notification } from "./notification.model";
   imports: [
       FilesModule,
       forwardRef(() => AuthModule),
-      SequelizeModule.forFeature([User, Block, Subscribe, Notification, Creator])
+      SequelizeModule.forFeature([User, Block, Subscribe, NotificationUser, Creator, ConfirmCode])
   ],
   exports: [UserService]
 })

@@ -6,8 +6,8 @@ interface NotificationCreationAttrs {
     userId: number;
 }
 
-@Table({tableName: 'user_notification'})
-export class Notification extends  Model<Notification, NotificationCreationAttrs> {
+@Table({tableName: 'user-notifications'})
+export class NotificationUser extends  Model<NotificationUser, NotificationCreationAttrs> {
 
     @Column({type: DataType.INTEGER, unique: true, autoIncrement: true, primaryKey: true})
     id: number;

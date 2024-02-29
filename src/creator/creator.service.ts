@@ -6,7 +6,7 @@ import { User } from "../user/user.model";
 import { ChangeNameDto } from "../dto/change-name.dto";
 import { FilesService, TypeFile } from "../files/files.service";
 import { DEFAULT_USER_PREVIEW } from "../consts/consts";
-import { Notification } from "./notification.model";
+import { NotificationCreator } from "./notification.model";
 import { CreateNotificationDto } from "../dto/create-notification.dto";
 
 @Injectable()
@@ -14,7 +14,7 @@ export class CreatorService {
 
     constructor(@InjectModel(Creator) private creatorRepository: typeof Creator,
                 @InjectModel(User) private userRepository: typeof User,
-                @InjectModel(Notification) private notificationRepository: typeof Notification,
+                @InjectModel(NotificationCreator) private notificationRepository: typeof NotificationCreator,
                 private fileService: FilesService) {}
 
     async create(dto: CreateCreatorDto) {

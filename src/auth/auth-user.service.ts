@@ -8,6 +8,7 @@ import { MailerService } from "@nestjs-modules/mailer";
 import * as path from "path";
 import { InjectModel } from "@nestjs/sequelize";
 import { Code } from "./code.model";
+import jwtDecode from "jwt-decode";
 
 @Injectable()
 export class AuthUserService {
@@ -52,14 +53,23 @@ export class AuthUserService {
     }
 
 
-    async isValidationToken() {
+    async isValidationToken(token) {
+        try {
+            const data = jwtDecode(token)
+        } catch (e) {
+            return "Access denied"
+        }
         return "Access is allowed"
+    }
+
+    async checkEmailCode(code: number) {
+
     }
 
     private async generateToken(user: User) {
         const payload = {email: user.email, id: user.id, identifier: user.identifier}
         return {
-            token: this.jwtService.sign(payload)
+            token: this.jwtService.sign(payload, {expiresIn: "24h"})
         }
     }
 
@@ -84,7 +94,6 @@ export class AuthUserService {
                 },
             })
             .catch((e) => {
-                console.log(e)
                 throw new HttpException(
                     `Ошибка работы почты: ${JSON.stringify(e)}`,
                     HttpStatus.UNPROCESSABLE_ENTITY,

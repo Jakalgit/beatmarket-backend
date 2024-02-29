@@ -23,9 +23,8 @@ export class AuthController {
         return this.authService.registrationData(dto)
     }
 
-    @UseGuards(JwtAuthGuard)
     @Post('/check-validation-user-token')
-    isValidationUserToken() {
-        return this.authService.isValidationToken()
+    isValidationUserToken(@Body('token') token: string) {
+        return this.authService.isValidationToken(token)
     }
 }

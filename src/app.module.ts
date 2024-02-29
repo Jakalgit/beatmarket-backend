@@ -25,9 +25,11 @@ import { Review } from "./review/review.model";
 import { PromoCode } from "./promocode/promocode.model";
 import { Purchase } from "./purchase/purchase.model";
 import { PurchaseParagraph } from "./purchase/paragraph.model";
-import { Notification } from "./user/notification.model";
+import { NotificationUser } from "./user/notification.model";
+import { NotificationCreator } from "./creator/notification.model";
 import { Subscribe } from "./user/subscribe.model";
 import { Creator } from "./creator/creator.model";
+import { ConfirmCode } from "./user/confirm-code.model";
 
 @Module({
   imports: [
@@ -44,8 +46,8 @@ import { Creator } from "./creator/creator.model";
           username: process.env.POSTGRES_USER,
           password: process.env.POSTGRES_PASSWORD,
           database: process.env.POSTGRES_DB,
-          models: [User, Track, Block, Creator, License, ArchiveLicense, LicenseParagraph,
-              Confirmation, Review, PromoCode, Purchase, PurchaseParagraph, Notification, Subscribe],
+          models: [User, Track, Block, Creator, License, ArchiveLicense, LicenseParagraph, Confirmation,
+              Review, PromoCode, Purchase, PurchaseParagraph, NotificationUser, NotificationCreator, Subscribe, ConfirmCode],
           autoLoadModels: true,
       }),
       FilesModule,

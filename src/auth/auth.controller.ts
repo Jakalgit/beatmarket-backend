@@ -1,12 +1,12 @@
 import { Body, Controller, Post, UseGuards } from "@nestjs/common";
-import { AuthUserService } from "./auth-user.service";
+import { AuthService } from "./auth.service";
 import { CreateUserDto } from "../dto/create-user.dto";
 import { JwtAuthGuard } from "./jwt-auth.guard";
 
 @Controller('auth')
 export class AuthController {
 
-    constructor(private authService: AuthUserService) {}
+    constructor(private authService: AuthService) {}
 
     @Post('/login')
     login(@Body() userDto: CreateUserDto) {
@@ -20,11 +20,12 @@ export class AuthController {
 
     @Post('/send-code')
     sendCode(@Body() dto: CreateUserDto) {
-        return this.authService.registrationData(dto)
+        return this.authService.createCode(dto)
     }
 
     @Post('/check-validation-user-token')
-    isValidationUserToken(@Body('token') token: string) {
-        return this.authService.isValidationToken(token)
+    isValidationUserToken(@Body('accessToken') accessToken: string,
+                          @Body('refreshToken') refreshToken: string) {
+        return this.authService.isValidationToken(accessToken, refreshToken)
     }
 }

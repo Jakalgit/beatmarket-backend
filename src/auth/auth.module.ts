@@ -1,5 +1,5 @@
 import { forwardRef, Module } from "@nestjs/common";
-import { AuthUserService } from './auth-user.service';
+import { AuthService } from './auth.service';
 import { AuthController } from './auth.controller';
 import { UserModule } from "../user/user.module";
 import { JwtModule } from "@nestjs/jwt";
@@ -11,7 +11,7 @@ import { User } from "../user/user.model";
 import { Code } from "./code.model";
 
 @Module({
-    providers: [AuthUserService],
+    providers: [AuthService],
     controllers: [AuthController],
     imports: [
         forwardRef(() => UserModule),
@@ -29,7 +29,7 @@ import { Code } from "./code.model";
         SequelizeModule.forFeature([User, Code])
     ],
     exports: [
-        AuthUserService,
+        AuthService,
         JwtModule
     ]
 })

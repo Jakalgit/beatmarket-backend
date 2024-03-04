@@ -7,4 +7,6 @@ export class CreateUserDto {
 
     @Length(8, 32, {message: "Пароль от 8 до 32 символов"})
     readonly password: string;
+
+    readonly code: number;
 }

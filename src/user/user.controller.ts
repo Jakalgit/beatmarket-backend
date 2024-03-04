@@ -17,15 +17,15 @@ import { ChangePasswordDto } from "./dto/change-password.dto";
 import { ChangeIdentifierDto } from "./dto/change-identifier.dto";
 import { FileInterceptor } from "@nestjs/platform-express";
 import { ChangeImageDto } from "./dto/change-image.dto";
-import { JwtAuthGuard } from "../auth/jwt-auth.guard";
 import { ChangeSubscribeDto } from "./dto/change-subscribe.dto";
+import { JwtGuard } from "../auth/guards/jwt.guard";
 
 @Controller('user')
 export class UserController {
 
     constructor(private userService: UserService) {}
 
-    @UseGuards(JwtAuthGuard)
+    @UseGuards(JwtGuard)
     @Get('/by-id/:id')
     getOne(@Param('id') id: number) {
         return this.userService.getOneById(id)
@@ -36,7 +36,7 @@ export class UserController {
         return this.userService.getAll()
     }
 
-    @UseGuards(JwtAuthGuard)
+    @UseGuards(JwtGuard)
     @Delete('/delete')
     delete(@Body() id: number) {
         return this.userService.delete()
@@ -52,56 +52,56 @@ export class UserController {
         return this.userService.unBlock(id)
     }
 
-    @UseGuards(JwtAuthGuard)
+    @UseGuards(JwtGuard)
     @Post('/change-name')
     changeName(@Body() dto: ChangeNameDto) {
         return this.userService.changeName(dto)
     }
 
-    @UseGuards(JwtAuthGuard)
+    @UseGuards(JwtGuard)
     @Post('/change-email')
     changeEmail(@Body() dto: ChangeEmailDto) {
         return this.userService.changeEmail(dto)
     }
 
-    @UseGuards(JwtAuthGuard)
+    @UseGuards(JwtGuard)
     @Post('/change-phone')
     changePhone(@Body() dto: ChangePhoneDto) {
         return this.userService.changePhone(dto)
     }
 
-    @UseGuards(JwtAuthGuard)
+    @UseGuards(JwtGuard)
     @Post('/change-password')
     changePassword(@Body() dto: ChangePasswordDto) {
         return this.userService.changePassword(dto)
     }
 
-    @UseGuards(JwtAuthGuard)
+    @UseGuards(JwtGuard)
     @Post('/change-identifier')
     changeIdentifier(@Body() dto: ChangeIdentifierDto) {
         return this.userService.changeIdentifier(dto)
     }
 
-    @UseGuards(JwtAuthGuard)
+    @UseGuards(JwtGuard)
     @Post('/change-image')
     @UseInterceptors(FileInterceptor('image'))
     changeImage(@UploadedFile() image, @Body() dto: ChangeImageDto) {
         return this.userService.changeImage(dto, image)
     }
 
-    @UseGuards(JwtAuthGuard)
+    @UseGuards(JwtGuard)
     @Post('/subscribe')
     subscribe(@Body() dto: ChangeSubscribeDto) {
         return this.userService.subscribe(dto)
     }
 
-    @UseGuards(JwtAuthGuard)
+    @UseGuards(JwtGuard)
     @Delete('/unsubscribe')
     unsubscribe(@Body() dto: ChangeSubscribeDto) {
         return this.userService.unsubscribe(dto)
     }
 
-    @UseGuards(JwtAuthGuard)
+    @UseGuards(JwtGuard)
     @Get('/notifications/:id')
     getAllNotifications(@Param('id') id: number) {
         return this.userService.getAllNotificationsByUserId(id)

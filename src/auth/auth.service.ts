@@ -10,8 +10,12 @@ import { InjectModel } from "@nestjs/sequelize";
 import { Code } from "./code.model";
 import jwtDecode from "jwt-decode";
 
+const EXPIRE_TIME = 20 * 1000;
+const ACCESS_TIME = '4h'
+const REFRESH_TIME = '14d'
+
 @Injectable()
-export class AuthUserService {
+export class AuthService {
 
     constructor(private userService: UserService,
                 private jwtService: JwtService,
@@ -24,7 +28,7 @@ export class AuthUserService {
         return this.generateToken(user)
     }
 
-    async registrationData(dto: CreateUserDto) {
+    async createCode(dto: CreateUserDto) {
         const candidate = await this.userRepository.findOne({where: {email: dto.email}})
         if (candidate) {
             throw new HttpException('Пользователь с таким email уже существует', HttpStatus.CONFLICT)
@@ -34,17 +38,27 @@ export class AuthUserService {
             await codeCandidate.destroy()
         }
         const codeNumber = await this.sendConfirmLetter(dto.email)
-        return await this.codeRepository.create({
+        const codeR = await this.codeRepository.create({
             email: dto.email,
             password: dto.password,
             code: codeNumber
         })
+        return true
     }
 
     async registration(userDto: CreateUserDto) {
+        const codeObj = await this.codeRepository.findOne({
+            where: {
+                email: userDto.email
+            }
+        })
         const candidate = await this.userService.getOneByEmail(userDto.email)
         if (candidate) {
             throw new HttpException('Пользователь с таким email уже существует', HttpStatus.CONFLICT)
+        }
+        console.log(codeObj.code, userDto.code)
+        if (codeObj.code !== userDto.code) {
+            throw new HttpException('Введён неправильный код', 403)
         }
         const hashPassword = await bcrypt.hash(userDto.password, 5);
         await this.codeRepository.destroy({where: {email: userDto.email}})
@@ -53,24 +67,53 @@ export class AuthUserService {
     }
 
 
-    async isValidationToken(token) {
+    async isValidationToken(accessToken: string, refreshToken: string) {
+        let res: any = {isValid: false}
         try {
-            const data = jwtDecode(token)
-        } catch (e) {
-            return "Access denied"
+            await this.jwtService.verifyAsync(refreshToken, {
+                secret: process.env.jwtRefreshTokenKey,
+            })
+            res = {...res, refreshToken: refreshToken}
+        } catch {
+            return res
         }
-        return "Access is allowed"
-    }
+        try {
+            await this.jwtService.verifyAsync(accessToken, {
+                secret: process.env.jwtSecretKey,
+            })
+        } catch {
+            const decode: any = jwtDecode(accessToken)
+            const userInfo = decode.user
+            const payload = {user: userInfo}
+            accessToken = await this.jwtService.signAsync({...payload, type: "act"}, {
+                expiresIn: ACCESS_TIME,
+                secret: process.env.jwtSecretKey,
+            })
+        }
 
-    async checkEmailCode(code: number) {
+        res.isValid = true
+        res = {...res, accessToken: accessToken}
 
+        return res
     }
 
     private async generateToken(user: User) {
-        const payload = {email: user.email, id: user.id, identifier: user.identifier}
+        const {password, ...userInfo} = user.dataValues
+        const payload = {user: userInfo}
         return {
-            token: this.jwtService.sign(payload, {expiresIn: "24h"})
-        }
+            user,
+            backendTokens: {
+                accessToken: await this.jwtService.signAsync({...payload, type: "act"}, {
+                    expiresIn: ACCESS_TIME,
+                    secret: process.env.jwtSecretKey,
+                }),
+                refreshToken: await this.jwtService.signAsync({...payload, type: "rct"}, {
+                    expiresIn: REFRESH_TIME,
+                    secret: process.env.jwtRefreshTokenKey,
+                }),
+                expiresIn: new Date().setTime(new Date().getTime() + EXPIRE_TIME),
+            },
+        };
     }
 
     private async validateUser(userDto: CreateUserDto) {

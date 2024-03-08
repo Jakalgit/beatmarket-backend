@@ -3,6 +3,7 @@ import { Block } from "./block.model";
 import { NotificationUser } from "./notification.model";
 import { Subscribe } from "./subscribe.model";
 import { Confirmation } from "../confirmation/confirmation.model";
+import { Chat } from "../chat/chat.model";
 
 interface UserCreationAttrs {
     name: string;
@@ -37,14 +38,17 @@ export class User extends  Model<User, UserCreationAttrs> {
     image: string;
 
     @HasOne(() => Block)
-    block: Block
+    block: Block;
 
     @HasMany(() => NotificationUser)
-    notifications: NotificationUser[]
+    notifications: NotificationUser[];
 
     @HasMany(() => Subscribe)
-    subscribes: Subscribe[]
+    subscribes: Subscribe[];
 
     @HasMany(() => Confirmation)
-    confirmation: Confirmation[]
+    confirmations: Confirmation[];
+
+    @HasMany(() => Chat)
+    chats: Chat[];
 }

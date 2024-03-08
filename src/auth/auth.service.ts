@@ -8,7 +8,7 @@ import { MailerService } from "@nestjs-modules/mailer";
 import * as path from "path";
 import { InjectModel } from "@nestjs/sequelize";
 import { Code } from "./code.model";
-import jwtDecode from "jwt-decode";
+import { jwtDecode } from "jwt-decode";
 
 const EXPIRE_TIME = 20 * 1000;
 const ACCESS_TIME = '4h'

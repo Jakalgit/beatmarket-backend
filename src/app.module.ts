@@ -30,6 +30,9 @@ import { NotificationCreator } from "./creator/notification.model";
 import { Subscribe } from "./user/subscribe.model";
 import { Creator } from "./creator/creator.model";
 import { ConfirmCode } from "./user/confirm-code.model";
+import { ChatModule } from './chat/chat.module';
+import { Chat } from "./chat/chat.model";
+import { Message } from "./chat/message.model";
 
 @Module({
   imports: [
@@ -47,7 +50,9 @@ import { ConfirmCode } from "./user/confirm-code.model";
           password: process.env.POSTGRES_PASSWORD,
           database: process.env.POSTGRES_DB,
           models: [User, Track, Block, Creator, License, ArchiveLicense, LicenseParagraph, Confirmation,
-              Review, PromoCode, Purchase, PurchaseParagraph, NotificationUser, NotificationCreator, Subscribe, ConfirmCode],
+              Review, PromoCode, Purchase, PurchaseParagraph, NotificationUser, NotificationCreator, Subscribe, ConfirmCode,
+              Chat, Message
+          ],
           autoLoadModels: true,
       }),
       FilesModule,
@@ -61,7 +66,8 @@ import { ConfirmCode } from "./user/confirm-code.model";
       ConfirmationModule,
       PurchaseModule,
       FeedbackModule,
-  ]
+      ChatModule,
+  ],
 })
 export class AppModule {
 
